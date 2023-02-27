@@ -1,34 +1,45 @@
-resource "kubernetes_pod_v1" "app1" {
+resource "kubernetes_deployment" "app-server" {
   metadata {
-    name = "my-app1"
+    name = "statuspage"
     labels = {
-      "app" = "app1"
+      test = "statuspage"
     }
   }
-
   spec {
-    container {
-      image = "hashicorp/http-echo"
-      name  = "my-app1"
-      args  = ["-text=Hello from my app 1"]
+    replicas = 3  
+
+    selector {
+      match_labels = {
+        test = "statuspage"
+      }
+    }
+  
+
+    template {
+      metadata {
+        labels = {
+          test = "statuspage"
+        }
+      }
+    
+
+      spec {
+        container {
+          image = "yaringabay1/app_60:latest"
+          name  = "actual-cont-app"
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+        }
+      }
     }
   }
 }
-
-resource "kubernetes_pod_v1" "app2" {
-  metadata {
-    name = "my-app2"
-    labels = {
-      "app" = "app2"
-    }
-  }
-
-  spec {
-    container {
-      image = "hashicorp/http-echo"
-      name  = "my-app2"
-      args  = ["-text=Hello from my app 2"]
-    }
-  }
-}
-

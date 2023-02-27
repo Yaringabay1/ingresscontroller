@@ -12,7 +12,7 @@ resource "kubernetes_ingress_v1" "ingress" {
         path {
           backend {
             service {
-              name = "my-app1-service"
+              name = "statuspage-service"
               port {
                 number = 5678
               }
@@ -20,19 +20,6 @@ resource "kubernetes_ingress_v1" "ingress" {
           }
 
           path = "/app1"
-        }
-
-        path {
-          backend {
-            service {
-              name = "my-app2-service"
-              port {
-                number = 5678
-              }
-            }
-          }
-
-          path = "/app2"
         }
       }
     }
